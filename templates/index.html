@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid md:grid-cols-5 gap-10">
+  <section class="md:col-span-2">
+    <h1 class="font-display text-4xl md:text-5xl font-extrabold leading-tight">Know what's on your plate before you eat it.</h1>
+    <p class="mt-4 text-lg max-w-md">Tell SafeBite what you can't eat. Photograph a menu, a QR code or a barcode and get a green, yellow or red answer for every item.</p>
+    <ul class="mt-8 space-y-3 text-sm">
+      <li class="flex items-center gap-3"><span class="w-4 h-4 rounded-full bg-go"></span>Green: nothing you avoid was found</li>
+      <li class="flex items-center gap-3"><span class="w-4 h-4 rounded-full bg-wait"></span>Yellow: might contain it, ask the chef</li>
+      <li class="flex items-center gap-3"><span class="w-4 h-4 rounded-full bg-stop"></span>Red: contains your allergen, and which one</li>
+    </ul>
+  </section>
+
+  <form method="post" class="md:col-span-3 bg-white rounded-xl p-6 shadow-sm space-y-6">
+    <div class="grid sm:grid-cols-3 gap-4">
+      <label class="sm:col-span-2 block text-sm font-medium">Name
+        <input name="name" required value="{{ user.name if user }}" class="mt-1 w-full rounded border border-ink/20 px-3 py-2"></label>
+      <label class="block text-sm font-medium">Age
+        <input name="age" type="number" min="1" max="120" value="{{ user.age if user and user.age }}" class="mt-1 w-full rounded border border-ink/20 px-3 py-2"></label>
+      <label class="sm:col-span-3 block text-sm font-medium">Your e-mail (SOS copies go here too)
+        <input name="email" type="email" value="{{ user.email if user }}" class="mt-1 w-full rounded border border-ink/20 px-3 py-2"></label>
+    </div>
+
+    <fieldset>
+      <legend class="text-sm font-medium">Allergies</legend>
+      <div class="mt-2 flex flex-wrap gap-2">
+        {% for a in allergen_list %}
+        <label class="cursor-pointer">
+          <input type="checkbox" name="allergens" value="{{ a }}" class="peer sr-only" {% if user and a in user.allergens %}checked{% endif %}>
+          <span class="inline-block rounded-full border border-ink/25 px-3 py-1 text-sm peer-checked:bg-stop peer-checked:text-white peer-checked:border-stop peer-focus-visible:ring-2">{{ a }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <input name="custom_allergens" placeholder="Others, comma separated (e.g. kiwi, banana)"
+             value="{{ (user.allergens | reject('in', allergen_list) | join(', ')) if user }}"
+             class="mt-3 w-full rounded border border-ink/20 px-3 py-2 text-sm">
+    </fieldset>
+
+    <fieldset>
+      <legend class="text-sm font-medium">Health conditions</legend>
+      <div class="mt-2 flex flex-wrap gap-2">
+        {% for d in disease_list %}
+        <label class="cursor-pointer">
+          <input type="checkbox" name="diseases" value="{{ d }}" class="peer sr-only" {% if user and d in user.diseases %}checked{% endif %}>
+          <span class="inline-block rounded-full border border-ink/25 px-3 py-1 text-sm peer-checked:bg-ink peer-checked:text-white peer-focus-visible:ring-2">{{ d }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <input name="custom_diseases" placeholder="Others, comma separated"
+             value="{{ (user.diseases | reject('in', disease_list) | join(', ')) if user }}"
+             class="mt-3 w-full rounded border border-ink/20 px-3 py-2 text-sm">
+    </fieldset>
+
+    <div class="rounded-lg bg-mist p-4">
+      <p class="text-sm font-medium">Emergency contact</p>
+      <div class="mt-2 grid sm:grid-cols-3 gap-3">
+        <input name="ec_name" placeholder="Name" value="{{ user.ec_name if user }}" class="rounded border border-ink/20 px-3 py-2 text-sm">
+        <input name="ec_phone" placeholder="Phone" value="{{ user.ec_phone if user }}" class="rounded border border-ink/20 px-3 py-2 text-sm">
+        <input name="ec_email" type="email" placeholder="E-mail" value="{{ user.ec_email if user }}" class="rounded border border-ink/20 px-3 py-2 text-sm">
+      </div>
+    </div>
+    <button class="rounded-lg bg-ink text-white font-semibold px-6 py-3 hover:bg-ink/90">Save profile and start scanning</button>
+  </form>
+</div>
+{% endblock %}

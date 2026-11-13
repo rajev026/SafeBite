@@ -1,0 +1,20 @@
+body { font-family: 'Instrument Sans', sans-serif; }
+.hidden { display: none !important; }
+.low { text-decoration: underline dotted #b45309; text-underline-offset: 3px; }
+:focus-visible { outline: 3px solid #12262B; outline-offset: 2px; }
+.dropzone.drag { background: #dff2e8; border-color: #1B9E5A; }
+.spinner { width: 1.25rem; height: 1.25rem; border: 3px solid #12262B33; border-top-color: #12262B; border-radius: 50%; }
+@media (prefers-reduced-motion: no-preference) {
+  .spinner { animation: spin .8s linear infinite; }
+  .pulse-sos { animation: pulse 2.4s ease-in-out infinite; }
+  .reveal { animation: reveal .25s ease-out; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(217,58,47,.45);} 50% { box-shadow: 0 0 0 14px rgba(217,58,47,0);} }
+@keyframes reveal { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none; } }
+video.cam { width: 100%; max-height: 60vh; object-fit: cover; border-radius: .75rem; background: #000; }
+.scanline { position: absolute; left: 8%; right: 8%; top: 50%; height: 2px; background: #D93A2F; box-shadow: 0 0 8px #D93A2F; }
+@media print {
+  header, footer, #controls, #sos-section, #history-panel, .no-print { display: none !important; }
+  body { background: #fff; }
+}
